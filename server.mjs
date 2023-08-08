@@ -1,19 +1,49 @@
 import express from "express";
+import session from "express-session";
+import bodyParser from "body-parser";
 import cors from "cors";
 import "./loadEnvironment.mjs";
-import users from "./routes/user.mjs";
+
+import users from "./routes/users.mjs";
 import expenses from "./routes/expenses.mjs";
+import login from "./routes/login.mjs";
+import logout from "./routes/logout.mjs";
+import authStatus from "./routes/authStatus.mjs";
 
 const PORT = process.env.PORT || 5050;
-const app = express();
+const server = express();
 
-app.use(cors());
-app.use(express.json());
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.json());
 
-app.use("/users", users);
-app.use("/expenses", expenses);
+// Express Session setup
+server.set("trust proxy", 1);
+server.use(
+  session({
+    secret: "asdfghjkl",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 3600000
+    }
+  })
+);
+
+server.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+  })
+);
+server.use(express.json());
+
+server.use("/users", users);
+server.use("/expenses", expenses);
+server.use("/login", login);
+server.use("/logout", logout);
+server.use("/authStatus", authStatus);
 
 // start the Express server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });

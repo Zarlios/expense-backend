@@ -8,10 +8,9 @@ let conn;
 try {
   conn = await client.connect();
 } catch(e) {
-  console.error(e);
+  console.log(e);
 }
 
-let db = conn.db("sample_training");
-db.collection("users").createIndex({"username": 1}, { unique: true } )
-
+let db = conn.db("expense_tracker");
+await db.collection("users").createIndex({"username": 1}, { unique: true } )
 export default db;
