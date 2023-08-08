@@ -1,19 +1,15 @@
 import express from "express";
 import db from "../db/conn.mjs";
-import { ObjectId } from "mongodb";
-import bcrypt from "bcrypt";
+import Expenses from "../db/models/expense.mjs"
 
 const expenses = express.Router();
 
-// User Routes
-const expenseCollection = await db.collection("expenses");
-
-expenses.get("/expense/:id", async (req, res) => {
-  let query = {_id: new ObjectId(req.params.id)};
-  let results = await expensesCollection.find({}).toArray();
+expenses.get("/expense", async (req, res) => {
+  let _id = req.session._id;
+  let results = await Expenses.find({ _id }).toArray();
   res.send(results).status(200);
 });
 
-expenses.post("/expense/:id")
+// expenses.post("/expense/:id")
 
-export default user;
+export default expenses; 

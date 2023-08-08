@@ -1,16 +1,26 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
 const connectionString = process.env.ATLAS_URI || "";
+const databaseName = "expense_tracker";
+let connection = "";
 
-const client = new MongoClient(connectionString);
-
-let conn;
 try {
-  conn = await client.connect();
-} catch(e) {
-  console.log(e);
+  mongoose.connect(`${connectionString}/${databaseName}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  
+  connection = mongoose.connection;
+  
+  connection.on("error", (error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
+  
+  connection.once("open", () => {
+    console.log("Connected to MongoDB using Mongoose");
+  });
+} catch (error) {
+  console.error("Error connecting to MongoDB:", error);
 }
 
-let db = conn.db("expense_tracker");
-await db.collection("users").createIndex({"username": 1}, { unique: true } )
-export default db;
+export default connection;

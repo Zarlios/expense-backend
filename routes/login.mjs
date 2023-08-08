@@ -1,11 +1,9 @@
 import express from "express";
 import db from "../db/conn.mjs";
 import bcrypt from "bcrypt";
+import User from "../db/models/user.mjs";
 
 const router = express.Router();
-
-// User Routes
-const userCollection = await db.collection("users");
 
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
@@ -14,7 +12,7 @@ router.post("/", async (req, res) => {
   console.log(req.session)
   
   try {
-    const user = await userCollection.findOne({ username });
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).json({ error: "Incorrect username/password" });
     }
@@ -26,9 +24,6 @@ router.post("/", async (req, res) => {
 
     req.session.userId = user._id;
     await req.session.save();
-    console.log("post after session")
-    console.log(req.sessionID)
-    console.log(req.session)
 
     res.sendStatus(200);
   } catch (err) {
