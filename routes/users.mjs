@@ -5,9 +5,9 @@ import User from "../db/models/user.mjs";
 
 const user = express.Router();
 
-user.get("/user/:id", async (req, res) => {
-  let query = {_id: new ObjectId(req.params.id)};
-  let result = await User.findOne(query);
+user.get("/user", async (req, res) => {
+  let _id = req.session.userId;
+  let result = await User.findOne(_id);
 
   if (!result) res.send("Not found").status(404);
   else res.send(result).status(200);
@@ -38,9 +38,8 @@ user.patch("/user/:id", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };
   const updates =  {
     $set: {
-      name: req.body.name,
-      position: req.body.position,
-      level: req.body.level
+      username: req.body.username,
+      password: req.body.password,
     }
   };
 
