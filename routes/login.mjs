@@ -7,9 +7,6 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
-  console.log("post before session")
-  console.log(req.sessionID)
-  console.log(req.session)
   
   try {
     const user = await User.findOne({ username });

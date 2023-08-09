@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const connectionString = process.env.ATLAS_URI || "";
-const databaseName = "expense_tracker";
+const databaseName = "";
 let connection = "";
 
 try {
-  mongoose.connect(`${connectionString}/${databaseName}`, {
+  mongoose.connect(connectionString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

@@ -1,23 +1,29 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import User from "../db/models/user.mjs";
-
+import Users from "../db/models/user.mjs";
 
 const user = express.Router();
-
-user.get("/user", async (req, res) => {
-  let _id = req.session.userId;
-  let result = await User.findOne(_id);
+user.get("/", async (req, res) => {
+  let result = await Users.find();
 
   if (!result) res.send("Not found").status(404);
   else res.send(result).status(200);
 });
 
-user.post("/user", async (req, res) => {
+// Find one
+user.get("/:id", async (req, res) => {
+  let _id = req.params.id;
+  let result = await Users.findOne(_id);
+
+  if (!result) res.send("Not found").status(404);
+  else res.send(result).status(200);
+});
+
+user.post("/", async (req, res) => {
   try {
     const { username, password } = req.body;
     
-    const existingUser = await User.findOne({ username });
+    const existingUser = await Users.findOne({ username });
     if (existingUser) {
       return res.status(409).json({ error: 'Username already exists' });
     }
@@ -27,14 +33,14 @@ user.post("/user", async (req, res) => {
       password: await bcrypt.hash(password, 10)
     };
 
-    const createdUser = await User.create(user); // Using the User model to create a new user
+    const createdUser = await Users.create(user); // Using the User model to create a new user
     res.status(201).json(createdUser);
   } catch (error) {
     res.status(500).json({ error: 'Could not create user' });
   }
 });
 
-user.patch("/user/:id", async (req, res) => {
+user.patch("/:id", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };
   const updates =  {
     $set: {
