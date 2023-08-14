@@ -1,5 +1,4 @@
 import express from "express";
-import db from "../db/conn.mjs";
 import bcrypt from "bcrypt";
 import User from "../db/models/user.mjs";
 
@@ -22,7 +21,7 @@ router.post("/", async (req, res) => {
     req.session.userId = user._id;
     await req.session.save();
 
-    res.sendStatus(200);
+    res.status(200).json({ status: 'success' });
   } catch (err) {
     console.error("Error logging in:", err);
     res.sendStatus(500);

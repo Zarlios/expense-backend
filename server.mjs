@@ -3,6 +3,7 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import cors from "cors";
 import "./loadEnvironment.mjs";
+import "./db/conn.mjs"
 
 import users from "./routes/users.mjs";
 import expenses from "./routes/expenses.mjs";
@@ -16,8 +17,6 @@ const server = express();
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 
-// Express Session setup
-server.set("trust proxy", 1);
 server.use(
   session({
     secret: "asdfghjkl",

@@ -1,23 +1,37 @@
-import { Decimal128 } from "mongodb";
 import mongoose from "mongoose";
 
 const expenseSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: true,
-    unique: true, // Create a unique index on the username field
+    unique: false,
   },
-  expense: {
-    type: String,
+  expenseDate: {
+    type: Date,
     required: true,
+    default: Date.now
   },
   amount: {
-    type: Decimal128,
+    type: Number,
     required: true,
+    min: 0,
+    scale: 2,
   },
   category: {
     type: String,
     required: true,
+  },
+  paymentMethod: {
+    type: String,
+  },
+  merchant: {
+    type: String,
+  },
+  note: {
+    type: String,
+  },
+  receipt: {
+    type: String,
   },
 });
 

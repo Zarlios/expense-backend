@@ -10,7 +10,6 @@ user.get("/", async (req, res) => {
   else res.send(result).status(200);
 });
 
-// Find one
 user.get("/:id", async (req, res) => {
   let _id = req.params.id;
   let result = await Users.findOne(_id);

@@ -3,20 +3,29 @@ import Expenses from "../db/models/expense.mjs";
 
 const expenses = express.Router();
 
-expenses.get("/expense", async (req, res) => {
+expenses.get("/", async (req, res) => {
   let _id = req.session.userId;
-  let results = await Expenses.find({ _id }).toArray();
+  let results = await Expenses.find({ _id });
   res.send(results).status(200);
 });
 
-expenses.post("/expense", async (req, res) => {
+expenses.post("/", async (req, res) => {
   try {
-    const expense = req.body;
+    const expense = {
+      userId: req.session.userId,
+      expenseDate: req.body.expenseDate,
+      category: req.body.category,
+      amount: req.body.amount,
+      paymentMethod: req.body.paymentMethod,
+      merchant: req.body.merchant,
+      note: req.body.note,
+      receipt: req.body.receipt
+    }
     const createdExpense = await Expenses.create(expense);
-    res.status(201).json(createdExpense);
+    res.status(200).json({ status: "success" });
   }
   catch (error) {
-    res.status(500).json({ error: 'Could not create expense' });
+    res.status(500).send( error );
   }
   
 });
@@ -34,12 +43,5 @@ expenses.patch("/expense", async (req, res) => {
   res.send(result).status(200);
 });
 
-// user.delete("/:id", async (req, res) => {
-//   const query = { _id: new ObjectId(req.params.id) };
-
-//   let result = await userCollection.deleteOne(query);
-
-//   res.send(result).status(200);
-// });
 
 export default expenses; 
