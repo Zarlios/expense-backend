@@ -4,9 +4,13 @@ import Expenses from "../db/models/expense.mjs";
 const expenses = express.Router();
 
 expenses.get("/", async (req, res) => {
-  let _id = req.session.userId;
-  let results = await Expenses.find({ _id });
-  res.send(results).status(200);
+  try {
+    const _id = req.session.userId;
+    let results = await Expenses.find({ userId: _id });
+    res.status(200).json(results);
+  } catch (error) {
+    res.send(error)
+  }
 });
 
 expenses.post("/", async (req, res) => {
