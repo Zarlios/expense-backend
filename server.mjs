@@ -29,10 +29,7 @@ server.use(
 );
 
 server.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:3000",
-  })
+  cors({})
 );
 server.use(express.json());
 
