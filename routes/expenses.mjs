@@ -1,5 +1,6 @@
 import express from "express";
 import Expenses from "../db/models/expense.mjs";
+import mongoose from "mongoose";
 
 const expenses = express.Router();
 
@@ -34,15 +35,30 @@ expenses.post("/", async (req, res) => {
   
 });
 
-expenses.patch("/expense", async (req, res) => {
-  let _id = req.session.userId;
+expenses.patch("/", async (req, res) => {
+  let _id = new mongoose.Types.ObjectId(req.body._id);
   const updates =  {
     $set: {
-
+      userId: req.session.userId,
+      expenseDate: req.body.expenseDate,
+      category: req.body.category,
+      amount: req.body.amount,
+      paymentMethod: req.body.paymentMethod,
+      merchant: req.body.merchant,
+      note: req.body.note,
+      receipt: req.body.receipt
     }
   };
 
-  let result = await User.updateOne(_id, updates);
+  let result = await Expenses.updateOne({_id: _id}, updates);
+
+  res.send(result).status(200);
+});
+
+expenses.delete("/:id", async (req, res) => {
+  const query = { _id: req.params.id };
+
+  let result = await Expenses.deleteOne(query);
 
   res.send(result).status(200);
 });
