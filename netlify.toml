@@ -1,5 +1,5 @@
 [build]
-command = "npm build-storybook"
+command = "npm run build-storybook"
 publish = "." # Change this to your server's build output
 
 [build.environment]
