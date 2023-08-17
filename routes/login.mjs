@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
-  
+
   try {
     const user = await User.findOne({ username });
     if (!user) {
@@ -19,12 +19,14 @@ router.post("/", async (req, res) => {
     }
 
     req.session.userId = user._id;
-    await req.session.save();
+    req.session.save().then(() => {
+      return res.status(200).json({ status: "success" });
+    });
 
-    res.status(200).json({ status: 'success' });
+    console.log(req.session);
   } catch (err) {
     console.error("Error logging in:", err);
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 });
 
