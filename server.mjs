@@ -30,7 +30,7 @@ server.use(
 
 server.use(
   cors({
-    origin: 'https://expense-backend-7vd9.onrender.com/'
+    origin: 'https://expense-frontend-85qh.onrender/'
   })
 );
 server.use(express.json());
