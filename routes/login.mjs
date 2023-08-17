@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
 
     req.session.userId = user._id;
     req.session.save((error) => {
-      return error?res.status(418):res.status(200).json({ status: "success" })
+      return error?res.status(418):res.status(200).json({ status: "success", userId: req.session.userId })
     });
   } catch (err) {
     console.error("Error logging in:", err);
