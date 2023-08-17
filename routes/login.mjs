@@ -19,12 +19,17 @@ router.post("/", async (req, res) => {
     }
 
     req.session.userId = user._id;
-    await req.session.save()
-    return res.status(200).json({ status: "success" });
-    
+    req.session
+      .save()
+      .then(() => {
+        return res.status(200).json({ status: "success" });
+      })
+      .catch((error) => {
+        return res.status(418).json(error);
+      });
   } catch (err) {
     console.error("Error logging in:", err);
-    return res.sendStatus(500).json(`error: ${err}`);
+    return res.sendStatus(500).json(err);
   }
 });
 
