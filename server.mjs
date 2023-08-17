@@ -29,7 +29,9 @@ server.use(
 );
 
 server.use(
-  cors({})
+  cors({
+    origin: 'https://expense-backend-7vd9.onrender.com/'
+  })
 );
 server.use(express.json());
 

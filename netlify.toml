@@ -1,6 +1,0 @@
-[build]
-command = "npm run build-storybook"
-publish = "." # Change this to your server's build output
-
-[build.environment]
-NODE_VERSION = "18.13.0" # Change this to your desired Node.js version
